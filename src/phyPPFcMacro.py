@@ -7,6 +7,8 @@ start with:
 myObj = phyPPFcMacro.doObj("<objname>", "<smartphone-ip>")
 example: d=phyPPFcMacro.doObj("Kegel2","192.168.x.x")
 
+if no object label given, the actually selected object is used.
+
 dependencies: phyphoxcon, PySide, FreeCAD, time
 '''
 
@@ -37,19 +39,24 @@ class doObj:
   dogabs=0.0
   phyp=None
 
-  def __init__(self,label, host, port=8080):
-    obs=FreeCAD.ActiveDocument.getObjectsByLabel(label)
-    l=len(obs)
-    if self.verbosity >1:
-      print "l:"+str(l)
-      print self.dorot
+  def __init__(self, label="", host=None, port=8080):
+    if label != "":
+      obs=FreeCAD.ActiveDocument.getObjectsByLabel(label)
+      l=len(obs)
+      if self.verbosity >1:
+        print "l:"+str(l)
+        print self.dorot
 
-    if l>1:
-      raise NameError("more than 1 obj with label %s found"%label)
-    if l<1:
-      raise NameError("no obj with label %s found"%label)
-    self._obj=obs[0]
-
+      if l>1:
+        raise NameError("more than 1 obj with label %s found"%label)
+      if l<1:
+        raise NameError("no obj with label %s found"%label)
+      self._obj=obs[0]
+    else:
+      self._obj = FreeCAD.ActiveDocument.ActiveObject
+      if self.verbosity:
+        print("Object selected: %s."%(self._obj.Label))
+      
     self.phyp=phyc.Pyconpp(host,port)
     
     self._timer=QtCore.QTimer()
