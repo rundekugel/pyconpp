@@ -6,11 +6,10 @@ phyphox app details see: phyphox.org
 Implemented values: accelertion
 """
 
-__author__ = "lifesim.de"
-__version__ = "0.1.0"
 
 import requests
 import json
+
 
 #http://<smartphone-ip>:8080/get?accX&accY&accZ&acc
 
@@ -26,25 +25,47 @@ class Pyconpp:
     self.port=port
     
   def getAcc(self):
-    return self.getXYZ(self.acc)
-  
-  def getGyro(self):
-    return self.getXYZ(self.gyro)
-  
-  def getXYZ(self, param):
+    r=None
     try:
-      url="http://" +self.host+":" +str(self.port)+"/get?" +param
+      url="http://" +self.host+":" +str(self.port)+"/get?" +self.acc
+      #print (url)
       r = requests.get(url)
     except:
+      pass
+      
+    #print(r)
+    if not r:
       return None
+      
     j=r.content
     jd=json.loads(j).get("buffer")
     r=[]
     for i in jd:
       r += jd.get(i).get("buffer")
-    return tuple(r)
     
-# demo
+    return tuple(r)    
+  
+  def getGyro(self):
+    r=None
+    try:
+      url="http://" +self.host+":" +str(self.port)+"/get?" +self.gyro
+      #print (url)
+      r = requests.get(url)
+    except:
+      pass
+      
+    #print(r)
+    if not r:
+      return None
+      
+    j=r.content
+    jd=json.loads(j).get("buffer")
+    r=[]
+    for i in jd:
+      r += jd.get(i).get("buffer")
+    
+    return tuple(r)
+  
 if __name__ == "main":  
   pp=Pyconpp("192.168.x.x")
   print(pp.getAcc())
