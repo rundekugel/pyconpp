@@ -3,4 +3,6 @@ connect to a smartphone phyphox app and get sensor values
 
 phyphox app details see: phyphox.org
 
-Implemented values: acceleration
+Implemented values: acceleration and gyro
+
+FreeCAD objects can be rotated with a smart phone.
